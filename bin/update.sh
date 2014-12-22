@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+export SOURCE=~/dotfiles
+export DESTINATION=~/
+export BACKUPS=$SOURCE/backups/$(date +%y%m%d-%H%M%S)/
+
+function backup() {
+    if [[ -e "$1" ]]; then
+        if [[ -h "$1" ]]; then
+            rm -f "$1" 
+        else
+            [[ -d "$BACKUPS" ]] || mkdir -p "$BACKUPS"
+            mv --target-directory="$BACKUPS/" "$1"
+        fi
+    fi
+}
+
+function link() {
+    backup "$DESTINATION/$2"
+    [[ -e "$DESTINATION/$2" ]] || ln -sf "$SOURCE/$1" "$DESTINATION/$2"
+}
+
+link vimrc          .vimrc
+link tmux.conf      .tmux.conf
+link bin            bin
+link bashrc         .bashrc
+link bash_profile         .bash_profile
