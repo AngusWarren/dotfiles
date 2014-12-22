@@ -1,0 +1,15 @@
+#/bin/bash
+
+# general git setup
+git config --global user.name "AngusWarren"
+git config --global user.email "angus@warren.bz"
+
+# vim setup
+mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+git clone https://github.com/altercation/vim-colors-solarized.git ~/.vim/bundle/vim-colors-solarized.vim
+git clone https://github.com/itchyny/lightline.vim ~/.vim/bundle/lightline.vim
+
+# dotfiles setup
+git clone https://github.com/AngusWarren/dotfiles.git ~/dotfiles
+sed -i.$(date +%y%m%d-%H%M%S) 's%https://%ssh://git@%' ~/dotfiles/.git/config
+~/dotfiles/bin/dfupdate
