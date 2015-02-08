@@ -24,4 +24,7 @@ link vimrc          .vimrc
 link tmux.conf      .tmux.conf
 link bin            bin
 link bashrc         .bashrc
-link bash_profile         .bash_profile
+link bash_profile   .bash_profile
+link dir_colors     .dir_colors
+link zshrc          .zshrc
+link zpretzo        .zpretzo

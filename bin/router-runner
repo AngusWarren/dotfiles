@@ -1,0 +1,15 @@
+#!/usr/bin/expect -f
+set timeout 10
+spawn telnet 10.1.1.1
+
+expect login:
+send "admin\n"
+
+expect Password:
+send -- "[read [open "~/.ssh/router.pass" r]]"
+
+expect admin@
+send "/mnt/sda1/custom.sh\n"
+
+expect Finished
+send "exit\n"

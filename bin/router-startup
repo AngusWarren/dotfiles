@@ -1,0 +1,35 @@
+#/bin/sh
+
+ECHO=/bin/echo
+ARP=/sbin/arp
+GREP=/bin/grep
+IPTABLES=/usr/sbin/iptables
+
+crontab=/tmp/var/spool/cron/crontabs/admin
+if [ ! -f $crontab ]; then
+    $ECHO "* * * * * $0 >> /tmp/cronttab.log" > $crontab
+    $ECHO "Crontab: Created"
+fi
+
+if ! /bin/ps | $GREP -q 'crond'; then
+    /usr/bin/nohup /usr/sbin/crond >& /dev/null &
+    $ECHO "Crond: Started"
+fi
+
+if ! $ARP -a | $GREP -q 'FF:FF:FF:FF:FF:FF'; then
+    $ARP -i br0 -s 10.1.1.254 FF:FF:FF:FF:FF:FF
+    $ECHO "ARP Redirect: Set"
+fi
+
+if ! $IPTABLES -t nat -nL | $GREP -q '!10.1.1.2'; then
+    $IPTABLES -I FORWARD -s 10.1.1.7 -i br0 -o ppp0 -p tcp -m tcp --dport 53 -j REJECT
+    $IPTABLES -I FORWARD -s 10.1.1.7 -i br0 -o ppp0 -p udp -m udp --dport 53 -j REJECT
+    $IPTABLES -t nat -I PREROUTING -s ! 10.1.1.2 -d 8.8.8.8 -p udp -m udp --dport 53 -j DNAT --to-destination 10.1.1.2
+    $IPTABLES -t nat -I PREROUTING -s ! 10.1.1.2 -d 8.8.4.4 -p udp -m udp --dport 53 -j DNAT --to-destination 10.1.1.2
+    $ECHO "iptables: Configured"
+fi
+
+/bin/date >> /tmp/scripttest
+
+/bin/echo "Finished"
+
