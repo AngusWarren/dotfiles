@@ -1,16 +1,24 @@
 #/bin/bash
 
-# general git setup
-git config --global user.name "AngusWarren"
-git config --global user.email "angus@warren.bz"
+## general git setup
+#git config --global user.name "AngusWarren"
+#git config --global user.email "angus@warren.bz"
 
 # vim setup
 mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 git clone https://github.com/altercation/vim-colors-solarized.git ~/.vim/bundle/vim-colors-solarized.vim
 git clone https://github.com/itchyny/lightline.vim ~/.vim/bundle/lightline.vim
 
+# zprezto setup
+git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto
+for rcfile in zlogin zlogout zprofile zshenv; do
+  [[ -e "~/.$rcfile" ]] || ln -s "~/.zprezto/runcoms/$rcfile" ~/.$rcfile
+done
+
+
 # dotfiles setup
-git clone ssh://git@github.com/AngusWarren/dotfiles.git ~/dotfiles
+git clone https://git@github.com/AngusWarren/dotfiles.git ~/dotfiles
+git --git-dir="$HOME/dotfiles/.git" remote set-url --push origin "ssh://git@github.com/AngusWarren/dotfiles.git"
 ~/dotfiles/bin/dfupdate
 
 #git clone https://github.com/AngusWarren/dotfiles.git ~/dotfiles

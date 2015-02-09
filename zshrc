@@ -10,6 +10,13 @@ if [[ -f ~/.zshrc.local ]]; then
         source ~/.zshrc.local
 fi
 
+# Set vim as the default editor
+export EDITOR='vim'
+export VISUAL='vim'
+
+# Set fpath to include local directory
+fpath=("$HOME/.zfunctions" $fpath)
+
 # Predictable SSH authentication socket location.
 if [[ -S "$SSH_AUTH_SOCK" && ! -h "$SSH_AUTH_SOCK" ]]; then
     ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock;

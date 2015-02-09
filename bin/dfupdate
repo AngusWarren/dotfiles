@@ -27,4 +27,5 @@ link bashrc         .bashrc
 link bash_profile   .bash_profile
 link dir_colors     .dir_colors
 link zshrc          .zshrc
-link zpretzo        .zpretzo
+link zpreztorc      .zpreztorc
+link zfunctions     .zfunctions
