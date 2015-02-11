@@ -12,7 +12,7 @@ git clone https://github.com/itchyny/lightline.vim ~/.vim/bundle/lightline.vim
 # zprezto setup
 git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto
 for rcfile in zlogin zlogout zprofile zshenv; do
-  [[ -e "~/.$rcfile" ]] || ln -s "~/.zprezto/runcoms/$rcfile" ~/.$rcfile
+  [[ -e "~/.$rcfile" ]] || ln -s "$HOME/.zprezto/runcoms/$rcfile" ~/.$rcfile
 done
 
 
