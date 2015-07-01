@@ -1,0 +1,22 @@
+#!/usr/bin/expect -f
+set timeout 10
+spawn telnet 10.1.1.1
+
+expect Login:
+send "admin\n"
+
+expect Password:
+send -- "[read [open "~/.ssh/router.pass" r]]"
+
+expect " > "
+send "iptables -t nat -nL | grep -q '!10.1.1.2 *8.8.8.8' || "
+send "iptables -t nat -I PREROUTING -s ! 10.1.1.2 -d 8.8.8.8 -p udp -m udp --dport 53 -j DNAT --to-destination 10.1.1.2\n"
+
+expect " > "
+send "iptables -t nat -nL | grep -q '!10.1.1.2 *8.8.4.4' || "
+send "iptables -t nat -I PREROUTING -s ! 10.1.1.2 -d 8.8.4.4 -p udp -m udp --dport 53 -j DNAT --to-destination 10.1.1.2\n"
+
+expect " > "
+send "exit\n"
+
+expect "Bye bye. Have a nice day!!!"
