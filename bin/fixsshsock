@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+# this scans the existing ssh socks for one with keys and links that to the 
+# file which is used by zsh as the $SSH_AUTH_SOCK variable.
+
+for sock in /tmp/ssh-*/agent.*; do 
+    printf "$sock "
+    if SSH_AUTH_SOCK=$sock ssh-add -l; then
+        ln -fs $sock ~/.ssh/ssh_auth_sock
+        break
+    fi
+done
