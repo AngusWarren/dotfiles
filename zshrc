@@ -17,11 +17,12 @@ export VISUAL='vim'
 # Set fpath to include local directory
 fpath=("$HOME/.zfunctions" $fpath)
 
-# Predictable SSH authentication socket location.
+# Predictable SSH authentication socket location. 
 if [[ -S "$SSH_AUTH_SOCK" && ! -h "$SSH_AUTH_SOCK" ]]; then
     ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock;
 fi
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
+agent() { SSH_AUTH_SOCK=$(ssh-agent | sed -n 's/SSH_AUTH_SOCK=\([^;]*\).*/\1/p') ssh-add && fixsshsock-choice }
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then

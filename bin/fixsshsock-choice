@@ -1,0 +1,34 @@
+#!/usr/bin/env zsh
+
+# this scans the existing ssh socks for one with keys and links that to the 
+# file which is used by zsh as the $SSH_AUTH_SOCK variable.
+export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+typeset -A OPTIONS
+OPTIONS=()
+
+for sock in /tmp/ssh-*/agent.*; do 
+    if SSH_AUTH_SOCK=$sock ssh-add -l; then
+        OPTIONS+=("$sock" "$(SSH_AUTH_SOCK=$sock ssh-add -l)")
+    fi >/dev/null
+done
+
+if [[ -z $OPTIONS ]]; then
+    echo "No valid agents found."
+    exit
+fi
+
+for AGENT in ${(@k)OPTIONS}; do
+    printf "$AGENT\t"
+    echo "$OPTIONS[$AGENT]"
+done
+
+select AGENT in ${(@k)OPTIONS}; do
+    if [[ -S $AGENT ]]; then #valid socket
+        ln -fs $AGENT ~/.ssh/ssh_auth_sock
+        echo "$AGENT is now linked as the current key agent."
+    else
+        echo "$AGENT doesn't appear to be a valid socket."
+        continue
+    fi
+    exit
+done
