@@ -1,0 +1,12 @@
+#/bin/sh
+
+## Angus Warren - 2016-06-30
+# Adds an iptables redirect to allow SSH traffic on port 25522.
+# Intended to be called frequently by cron.
+
+GREP=/bin/grep
+IPTABLES=/sbin/iptables
+
+if ! $IPTABLES -t nat -nL | $GREP -q '!25522'; then
+    $IPTABLES -t nat -I PREROUTING -p tcp -m tcp --dport 25522 -j REDIRECT --to 22
+fi

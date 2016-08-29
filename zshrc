@@ -49,3 +49,4 @@ insert-last-command-output() {
 zle -N insert-last-command-output
 bindkey "^X^L" insert-last-command-output
 
+export KEYTIMEOUT=10
