@@ -30,6 +30,7 @@ endif
 "default indent settings
 set shiftwidth=4
 set softtabstop=4
+set tabstop=4
 set expandtab
 set autoindent
 
@@ -88,3 +89,5 @@ endfunction
 
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 noremap <Leader>r ggg?G``
+
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
